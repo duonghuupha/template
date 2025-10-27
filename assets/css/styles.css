@@ -1,32 +1,37 @@
-/* variables and base */
+/* ---------- variables ---------- */
 :root {
-    --primary: #009688;
-    /* teal / xanh ngọc - you can tweak */
-    --sidebar-bg: #00796b;
-    /* darker for sidebar */
-    --topbar-bg: #00796b;
-    --footer-bg: #00796b;
-    --bg: #f4f7f8;
-    --text: #1f2d3d;
-    --sidebar-w: 260px;
-    --sidebar-collapsed-w: 72px;
-    --header-h: 56px;
+    --primary: #16a085;
+    /* xanh ngọc giống ảnh 1 */
+    --sidebar-bg: #16a085;
+    --topbar-bg: #19b194;
+    --footer-bg: #138f85;
+    --bg: #f6f8f9;
+    --text: #21303a;
+
+    --sidebar-w: 250px;
+    --sidebar-collapsed-w: 80px;
+    --header-h: 60px;
     --footer-h: 44px;
 }
 
-/* dark theme variables */
+/* dark */
 body.dark {
-    --primary: #7c4dff;
+    --primary: #6b5bff;
     --sidebar-bg: #0b1220;
-    /* deep dark */
-    --topbar-bg: #0b1220;
-    --footer-bg: #0b1220;
-    --bg: #0a0f18;
-    --text: #dbe8ff;
+    /* deep dark like image 2 */
+    --topbar-bg: #101424;
+    --footer-bg: #0f1a2a;
+    --bg: #0a0f16;
+    --text: #d9e6ff;
 }
 
+/* base */
 * {
     box-sizing: border-box
+}
+
+html, body {
+    height: 100%
 }
 
 body {
@@ -35,179 +40,180 @@ body {
     background: var(--bg);
     color: var(--text);
     overflow: hidden;
-    /* page no scroll; content scrolls internally */
+    /* main-content will scroll */
 }
 
 /* layout */
-.app {
+.admin-app {
     display: flex;
     height: 100vh;
     width: 100%;
 }
 
-/* SIDEBAR */
+/* ---------- SIDEBAR ---------- */
 .sidebar {
     width: var(--sidebar-w);
     background: var(--sidebar-bg);
     color: #fff;
     display: flex;
     flex-direction: column;
-    transition: width .22s ease, left .2s ease;
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+    transition: width .22s ease;
+    flex-shrink: 0;
     position: relative;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
 }
 
-/* top part brand */
+/* top */
 .sidebar-top {
-    padding: 12px 14px;
+    padding: 10px 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06)
 }
 
 .brand-icon {
-    font-size: 18px
+    font-weight: 700;
+    font-size: 14px
 }
 
 .brand-text {
-    font-weight: 700;
-    font-size: 1rem
+    font-weight: 700
 }
 
-/* nav container - scrollable */
+/* nav scroll area */
 .sidebar-nav {
     overflow: auto;
-    padding: 8px 0;
+    padding: 8px 6px;
     flex: 1;
 }
 
-/* styled scrollbar for webkit */
+/* styled scrollbar */
 .sidebar-nav::-webkit-scrollbar {
-    width: 8px;
+    width: 8px
 }
 
 .sidebar-nav::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.12);
-    border-radius: 6px;
+    border-radius: 6px
 }
 
-/* menu items */
+/* menu item */
 .menu-root {
-    padding-left: 0;
-    margin: 0;
     list-style: none;
+    padding: 0;
+    margin: 0
 }
 
 .menu-root .menu-item {
-    margin: 0;
+    position: relative
 }
 
-.menu-root .nav-link {
+.menu-root .menu-item+.menu-item {
+    margin-top: 4px
+}
+
+.nav-link {
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 10px 14px;
     color: #fff;
     text-decoration: none;
+    border-radius: 6px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    border-radius: 6px;
-    margin: 4px 8px;
+    margin: 4px;
 }
 
-.menu-root .nav-link .bi {
+.nav-link .bi {
     width: 26px;
     font-size: 1.15rem;
-    text-align: center;
+    text-align: center
 }
 
-.menu-root .nav-link .label {
-    flex: 1
+.nav-link .label {
+    flex: 1;
+    font-weight: 500
 }
 
-.menu-root .nav-link:hover {
-    background: rgba(255, 255, 255, 0.05);
+.nav-link:hover {
+    background: rgba(0, 0, 0, 0.08)
 }
 
-/* active */
-.menu-root .nav-link.active {
-    background: rgba(0, 0, 0, 0.13);
-    font-weight: 600
-}
-
-/* children (submenu) - hidden under parent by default */
+/* children (submenu) as flyout panel (hidden by default) */
 .menu-children {
-    display: none;
-    padding-left: 0;
-    margin: 6px 0 0 0;
+    display: block;
+    position: absolute;
+    left: calc(var(--sidebar-w));
+    top: 0;
+    min-width: 220px;
+    background: var(--sidebar-bg);
+    border-radius: 6px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    padding: 6px 0;
+    z-index: 1600;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all .12s;
 }
 
 .menu-children .nav-link {
-    padding-left: 44px;
-    font-size: .95rem;
-    background: transparent
+    padding: 8px 12px;
+    margin: 2px 6px;
 }
 
-/* show children when parent has .open */
-.menu-item.open>.menu-children {
-    display: block;
+/* when hovering parent show submenu */
+.menu-item:hover>.menu-children {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
 }
 
-/* sidebar footer */
+/* footer */
 .sidebar-footer {
     padding: 8px;
     border-top: 1px solid rgba(255, 255, 255, 0.04);
     text-align: center
 }
 
-/* COLLAPSED */
+/* collapsed state */
 .sidebar.collapsed {
     width: var(--sidebar-collapsed-w);
 }
 
 .sidebar.collapsed .brand-text {
-    display: none;
+    display: none
 }
 
-.sidebar.collapsed .menu-root .nav-link {
+.sidebar.collapsed .nav-link {
     justify-content: center;
-    padding: 10px 6px;
+    padding: 10px 6px
 }
 
-.sidebar.collapsed .menu-root .nav-link .label {
-    display: none;
+.sidebar.collapsed .nav-link .label {
+    display: none
 }
 
+/* when collapsed, submenu position adjusts */
 .sidebar.collapsed .menu-children {
-    display: none !important;
+    left: calc(var(--sidebar-collapsed-w));
+    /* place to right of collapsed sidebar */
 }
 
-/* FLYOUT submenu (when collapsed show a floating menu to right) */
-.flyout {
-    position: absolute;
-    background: var(--sidebar-bg);
-    color: #fff;
-    min-width: 200px;
-    border-radius: 6px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-    z-index: 1500;
+/* when collapsed: hide submenu inline (we use flyout on hover) */
+.sidebar.collapsed .menu-children {
+    top: 0;
 }
 
-.flyout .nav-link {
-    padding: 8px 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* MAIN area */
+/* ---------- MAIN ---------- */
 .main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-width: 0;
+    min-width: 0
 }
 
 /* topbar */
@@ -219,18 +225,13 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    z-index: 20;
     position: sticky;
     top: 0;
+    z-index: 1400;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
-.topbar .btn {
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.08);
-}
-
-/* main-content inner scroll */
+/* content area scroll internally */
 .main-content {
     padding: 18px;
     height: calc(100vh - var(--header-h) - var(--footer-h));
@@ -245,18 +246,21 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: sticky;
+    bottom: 0;
+    z-index: 1300
 }
 
-/* responsive: mobile overlay sidebar */
+/* responsive: mobile overlay */
 @media (max-width: 991px) {
     .sidebar {
         position: fixed;
         left: -320px;
         top: 0;
         bottom: 0;
-        z-index: 1040;
-        width: 280px;
-        transition: left .22s;
+        width: 260px;
+        z-index: 2000;
+        transition: left .22s ease;
     }
 
     .sidebar.show {
@@ -271,19 +275,18 @@ body {
         position: fixed;
         left: 0;
         right: 0;
-        z-index: 30;
+        z-index: 1500;
     }
 
     .main-content {
-        padding-top: calc(var(--header-h) + 16px);
+        padding-top: calc(var(--header-h) + 16px)
     }
 
     .footer {
         position: fixed;
-        bottom: 0;
         left: 0;
         right: 0;
-        z-index: 25;
+        bottom: 0;
     }
 }
 
@@ -292,7 +295,14 @@ html, body {
     overflow-x: hidden;
 }
 
-/* small helpers */
-.hidden {
-    display: none !important;
+/* flyout small tooltip style when collapsed and no children */
+.flytip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.82);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    z-index: 2000;
+    font-size: 13px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }

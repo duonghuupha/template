@@ -1,121 +1,129 @@
-/**
- * assets/js/main.js
- * Sidebar (collapse/flyout), mobile toggle, dark mode, tooltips
- */
+/* assets/js/script.js
+   - collapse/expand sidebar
+   - mobile toggle
+   - flyout submenu on hover (works both collapsed and expanded)
+   - dark mode toggle
+*/
+
 (function ($) {
     $(function () {
+        const $body = $('body');
         const $sidebar = $('#sidebar');
         const $btnToggle = $('#btnToggleCollapse');
         const $btnMobileToggle = $('#btnMobileToggle');
         const $btnCollapseSmall = $('#btnCollapseSmall');
         const $btnTheme = $('#btnTheme');
-        let flyoutEl = null;
+        let $flyout = null;
+        const sidebarWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-w')) || 250;
+        const collapsedWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-collapsed-w')) || 80;
 
-        // Toggle collapse (desktop)
+        // Toggle collapse (footer button)
         $('#btnToggleCollapse').on('click', function () {
             $sidebar.toggleClass('collapsed');
-            // rotate arrow icon
+            // update arrow icon
             $(this).find('i').toggleClass('bi-chevron-left bi-chevron-right');
         });
 
-        // mobile toggle: show/hide sidebar
-        $btnMobileToggle.on('click', function () {
+        // Mobile show/hide
+        $btnMobileToggle.on('click', function (e) {
+            e.preventDefault();
             $sidebar.toggleClass('show');
-            $('body').toggleClass('sidebar-open');
+            $body.toggleClass('sidebar-open');
         });
         $btnCollapseSmall.on('click', function () {
             $sidebar.toggleClass('show');
-            $('body').toggleClass('sidebar-open');
+            $body.toggleClass('sidebar-open');
         });
 
-        // submenu open/close (click)
-        $sidebar.on('click', '.has-children > .parent', function (e) {
-            e.preventDefault();
-            const $li = $(this).closest('.menu-item');
-            $li.toggleClass('open');
-            $li.find('.menu-children').first().slideToggle(180);
-            $(this).find('.arrow').toggleClass('rotated');
+        // Dark mode toggle
+        $btnTheme.on('click', function () {
+            $body.toggleClass('dark');
+            // optional: store preference
+            try { localStorage.setItem('themeDark', $body.hasClass('dark') ? '1' : '0'); } catch (e) { }
         });
+        // load theme from storage
+        try {
+            if (localStorage.getItem('themeDark') === '1') $body.addClass('dark');
+        } catch (e) { }
 
-        // flyout for collapsed sidebar: show submenu on hover or show tooltip
-        $sidebar.on('mouseenter', '.menu-root .menu-item', function (e) {
-            const isCollapsed = $sidebar.hasClass('collapsed');
-            const $item = $(this);
-            const title = $item.find('.nav-link').data('title') || $item.find('.label').text().trim();
-
-            // remove any existing flyout
+        // Handle hover to show flyout submenu or tooltip
+        $('#sidebarNav').on('mouseenter', '.menu-item', function (e) {
+            // remove old flyout
             removeFlyout();
-
-            if (isCollapsed) {
-                // if this item has children -> show flyout panel on right
-                if ($item.hasClass('has-children')) {
-                    const $children = $item.find('.menu-children').first().clone(true);
-                    if ($children.length) {
-                        flyoutEl = $('<div class="flyout"></div>').appendTo('body');
-                        // convert children into links
-                        $children.find('a').each(function () {
-                            const $a = $(this).clone();
-                            $a.removeClass('child').addClass('nav-link');
-                            flyoutEl.append($a);
-                        });
-                        // position flyout to right of sidebar
-                        const ofs = $item.offset();
-                        const left = $sidebar.outerWidth() + 8;
-                        flyoutEl.css({ top: ofs.top, left: left + $sidebar.offset().left });
+            const $item = $(this);
+            const hasChildren = $item.hasClass('has-children');
+            const rect = this.getBoundingClientRect();
+            const isCollapsed = $sidebar.hasClass('collapsed');
+            const leftBase = $sidebar.hasClass('collapsed') ? collapsedWidth : sidebarWidth;
+            if (hasChildren) {
+                // clone submenu contents to flyout
+                const $children = $item.find('.menu-children').first().clone(true, true);
+                if ($children.length) {
+                    $flyout = $('<div class="menu-flyout"></div>').css({
+                        position: 'absolute',
+                        top: rect.top + window.scrollY,
+                        left: leftBase + $sidebar.offset().left + 8,
+                        zIndex: 3000
+                    }).appendTo('body');
+                    // style wrapper
+                    $flyout.css({ background: getComputedStyle(document.documentElement).getPropertyValue('--sidebar-bg'), borderRadius: '6px', boxShadow: '0 8px 24px rgba(0,0,0,0.35)', padding: '6px 0' });
+                    $children.find('a').each(function () {
+                        const $a = $(this).clone();
+                        $a.css({ display: 'flex', gap: '10px', alignItems: 'center', padding: '8px 14px', color: '#fff', textDecoration: 'none' });
+                        $flyout.append($a);
+                    });
+                }
+            } else {
+                // show small tooltip label when collapsed
+                if (isCollapsed) {
+                    const title = $item.find('.nav-link').data('title') || $item.find('.label').text().trim();
+                    if (title) {
+                        $flyout = $('<div class="flytip"></div>').text(title).appendTo('body');
+                        // position
+                        $flyout.css({ top: rect.top + window.scrollY + (rect.height / 2) - ($flyout.outerHeight() / 2), left: leftBase + $sidebar.offset().left + 10 });
                     }
-                } else {
-                    // no children => show small tooltip
-                    flyoutEl = $('<div class="flyout"></div>').appendTo('body').text(title);
-                    const ofs = $item.offset();
-                    flyoutEl.css({ top: ofs.top, left: $sidebar.outerWidth() + $sidebar.offset().left + 8, padding: '8px 12px' });
                 }
             }
-        }).on('mouseleave', '.menu-root .menu-item', function () {
-            // remove flyout on leave
-            setTimeout(removeFlyout, 120);
         });
 
-        // ensure flyout removes on click elsewhere or window resize
-        $(document).on('click', function (e) {
-            if (!$(e.target).closest('.flyout, #sidebar').length) removeFlyout();
+        $('#sidebarNav').on('mouseleave', '.menu-item', function () {
+            // remove after short delay (allow hover into flyout)
+            setTimeout(removeFlyout, 150);
         });
-        $(window).on('resize', removeFlyout);
+
+        // If mouse enters flyout, keep it open until leave
+        $(document).on('mouseenter', '.menu-flyout, .flytip', function () { clearTimeout($.data(this, 'timer')); });
+        $(document).on('mouseleave', '.menu-flyout, .flytip', function () { removeFlyout(); });
 
         function removeFlyout() {
-            if (flyoutEl && flyoutEl.length) { flyoutEl.remove(); flyoutEl = null; }
+            if ($flyout && $flyout.length) { $flyout.remove(); $flyout = null; }
         }
 
-        // menu link click (demo) - update main content title
+        // Close mobile sidebar when clicking outside
+        $(document).on('click touchstart', function (e) {
+            if ($(window).width() < 992) {
+                if (!$(e.target).closest('#sidebar,.btn-mobile').length && $sidebar.hasClass('show')) {
+                    $sidebar.removeClass('show'); $body.removeClass('sidebar-open');
+                }
+            }
+        });
+
+        // handle nav link clicks (demo)
         $('#sidebarNav').on('click', 'a.nav-link', function (e) {
             e.preventDefault();
             $('#sidebarNav a.nav-link').removeClass('active');
             $(this).addClass('active');
-            // close mobile sidebar after click
-            if ($(window).width() < 992) { $sidebar.removeClass('show'); $('body').removeClass('sidebar-open'); }
+            if ($(window).width() < 992) { $sidebar.removeClass('show'); $body.removeClass('sidebar-open'); }
+            // optionally change main title
+            const t = $(this).data('title') || $(this).find('.label').text();
+            $('.topbar-title').text(t);
         });
 
-        // theme toggle
-        $btnTheme.on('click', function () {
-            $('body').toggleClass('dark');
-        });
-
-        // keyboard escape to close mobile sidebar
+        // accessibility: keyboard escape to close mobile sidebar
         $(document).on('keydown', function (e) {
             if (e.key === 'Escape' && $sidebar.hasClass('show')) {
-                $sidebar.removeClass('show'); $('body').removeClass('sidebar-open');
+                $sidebar.removeClass('show'); $body.removeClass('sidebar-open');
             }
         });
-
-        // accessibility: show title in aria-label for screen readers
-        $('#sidebarNav a.nav-link').each(function () {
-            const txt = $(this).find('.label').text().trim();
-            if (txt) $(this).attr('aria-label', txt);
-        });
-
-        // initial: if viewport small hide sidebar
-        if ($(window).width() < 992) {
-            $sidebar.removeClass('collapsed');
-        }
-
     });
 })(jQuery);
