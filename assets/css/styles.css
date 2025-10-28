@@ -1,31 +1,33 @@
-/* ---------- variables ---------- */
+/* Variables */
 :root {
-    --primary: #16a085;
-    /* xanh ngọc giống ảnh 1 */
-    --sidebar-bg: #16a085;
-    --topbar-bg: #19b194;
-    --footer-bg: #138f85;
+    --primary: #17a2a3;
+    /* header/footer accent */
+    --sidebar-bg: #e0e0e0;
+    /* sidebar light gray */
+    --sidebar-text: #0f1a1a;
+    --topbar-bg: var(--primary);
+    --footer-bg: #128380;
     --bg: #f6f8f9;
     --text: #21303a;
 
     --sidebar-w: 250px;
     --sidebar-collapsed-w: 80px;
     --header-h: 60px;
-    --footer-h: 44px;
+    --footer-h: 48px;
 }
 
-/* dark */
+/* Dark mode */
 body.dark {
     --primary: #6b5bff;
-    --sidebar-bg: #0b1220;
-    /* deep dark like image 2 */
+    --sidebar-bg: #2c2c2c;
+    --sidebar-text: #e6eefc;
     --topbar-bg: #101424;
     --footer-bg: #0f1a2a;
     --bg: #0a0f16;
     --text: #d9e6ff;
 }
 
-/* base */
+/* Base */
 * {
     box-sizing: border-box
 }
@@ -39,66 +41,77 @@ body {
     font-family: "Roboto Condensed", sans-serif;
     background: var(--bg);
     color: var(--text);
-    overflow: hidden;
-    /* main-content will scroll */
+    overflow-x: hidden;
+    /* prevent horizontal scroll */
+    min-width: 320px;
 }
 
-/* layout */
+/* Layout */
 .admin-app {
     display: flex;
     height: 100vh;
     width: 100%;
+    min-width: 320px;
 }
 
-/* ---------- SIDEBAR ---------- */
+/* Sidebar */
 .sidebar {
     width: var(--sidebar-w);
     background: var(--sidebar-bg);
-    color: #fff;
+    color: var(--sidebar-text);
     display: flex;
     flex-direction: column;
-    transition: width .22s ease;
+    transition: width .22s ease, left .22s ease, background .22s ease;
     flex-shrink: 0;
+    border-right: 1px solid rgba(0, 0, 0, 0.06);
+    min-height: 100vh;
     position: relative;
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+    z-index: 1200;
+    overflow: visible;
 }
 
-/* top */
+/* Sidebar top (logo area) */
 .sidebar-top {
+    height: var(--header-h);
     padding: 10px 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06)
+    gap: 8px;
 }
 
-.brand-icon {
-    font-weight: 700;
-    font-size: 14px
+.brand-logo {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    margin-right: 6px;
 }
 
 .brand-text {
-    font-weight: 700
+    font-weight: 700;
+    color: var(--sidebar-text);
+    font-size: 15px;
 }
 
-/* nav scroll area */
+/* Nav area */
 .sidebar-nav {
-    overflow: auto;
-    padding: 8px 6px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px 6px;
     flex: 1;
 }
 
-/* styled scrollbar */
+/* scrollbar style */
 .sidebar-nav::-webkit-scrollbar {
     width: 8px
 }
 
 .sidebar-nav::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(0, 0, 0, 0.12);
     border-radius: 6px
 }
 
-/* menu item */
+/* Menu */
 .menu-root {
     list-style: none;
     padding: 0;
@@ -118,19 +131,20 @@ body {
     align-items: center;
     gap: 10px;
     padding: 10px 14px;
-    color: #fff;
+    color: var(--sidebar-text);
     text-decoration: none;
-    border-radius: 6px;
+    border-radius: 8px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin: 4px;
+    margin: 4px 6px;
 }
 
 .nav-link .bi {
-    width: 26px;
+    width: 28px;
     font-size: 1.15rem;
-    text-align: center
+    text-align: center;
+    color: var(--sidebar-text)
 }
 
 .nav-link .label {
@@ -139,10 +153,10 @@ body {
 }
 
 .nav-link:hover {
-    background: rgba(0, 0, 0, 0.08)
+    background: rgba(0, 0, 0, 0.04)
 }
 
-/* children (submenu) as flyout panel (hidden by default) */
+/* Submenu (flyout) - CSS only */
 .menu-children {
     display: block;
     position: absolute;
@@ -150,73 +164,62 @@ body {
     top: 0;
     min-width: 220px;
     background: var(--sidebar-bg);
-    border-radius: 6px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    color: var(--sidebar-text);
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
     padding: 6px 0;
     z-index: 1600;
     visibility: hidden;
     opacity: 0;
     transform: translateX(-8px);
-    transition: all .12s;
+    transition: all .12s ease;
 }
 
 .menu-children .nav-link {
     padding: 8px 12px;
-    margin: 2px 6px;
+    margin: 4px 6px;
+    color: var(--sidebar-text)
 }
 
-/* when hovering parent show submenu */
+/* show flyout when parent hovered */
 .menu-item:hover>.menu-children {
     visibility: visible;
     opacity: 1;
     transform: translateX(0);
 }
 
-/* footer */
-.sidebar-footer {
-    padding: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
-    text-align: center
+/* adjust flyout when collapsed */
+.sidebar.collapsed .menu-children {
+    left: calc(var(--sidebar-collapsed-w));
 }
 
-/* collapsed state */
+/* Collapsed */
 .sidebar.collapsed {
     width: var(--sidebar-collapsed-w);
 }
 
 .sidebar.collapsed .brand-text {
-    display: none
+    display: none;
 }
 
 .sidebar.collapsed .nav-link {
     justify-content: center;
-    padding: 10px 6px
+    padding: 10px 6px;
 }
 
-.sidebar.collapsed .nav-link .label {
-    display: none
+.sidebar.collapsed .label {
+    display: none;
 }
 
-/* when collapsed, submenu position adjusts */
-.sidebar.collapsed .menu-children {
-    left: calc(var(--sidebar-collapsed-w));
-    /* place to right of collapsed sidebar */
-}
-
-/* when collapsed: hide submenu inline (we use flyout on hover) */
-.sidebar.collapsed .menu-children {
-    top: 0;
-}
-
-/* ---------- MAIN ---------- */
+/* Main area */
 .main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-width: 0
+    min-width: 0;
 }
 
-/* topbar */
+/* Topbar */
 .topbar {
     height: var(--header-h);
     background: var(--topbar-bg);
@@ -231,14 +234,15 @@ body {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
-/* content area scroll internally */
+/* main content (internal scroll only) */
 .main-content {
     padding: 18px;
     height: calc(100vh - var(--header-h) - var(--footer-h));
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
-/* footer */
+/* Footer */
 .footer {
     height: var(--footer-h);
     background: var(--footer-bg);
@@ -248,10 +252,10 @@ body {
     justify-content: center;
     position: sticky;
     bottom: 0;
-    z-index: 1300
+    z-index: 1300;
 }
 
-/* responsive: mobile overlay */
+/* Responsive: mobile overlay sidebar */
 @media (max-width: 991px) {
     .sidebar {
         position: fixed;
@@ -290,12 +294,12 @@ body {
     }
 }
 
-/* ensure no horizontal scroll */
+/* No horizontal scroll */
 html, body {
     overflow-x: hidden;
 }
 
-/* flyout small tooltip style when collapsed and no children */
+/* small flytip */
 .flytip {
     position: absolute;
     background: rgba(0, 0, 0, 0.82);
@@ -304,5 +308,4 @@ html, body {
     border-radius: 4px;
     z-index: 2000;
     font-size: 13px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }

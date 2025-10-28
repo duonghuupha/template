@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Admin Template - Demo</title>
+    <title>Admin Template — Demo</title>
 
     <!-- Roboto Condensed -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap"
@@ -12,9 +12,6 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- jQuery UI CSS (optional, used for small UI niceties) -->
-    <link href="https://code.jquery.com/ui/1.13.2/themes/smoothness/jquery-ui.css" rel="stylesheet">
 
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -25,17 +22,18 @@
 
 <body>
     <div class="admin-app">
+
         <!-- SIDEBAR -->
         <aside id="sidebar" class="sidebar" role="navigation" aria-label="Sidebar">
-            <div class="sidebar-top d-flex align-items-center justify-content-between px-3 py-2">
+            <div class="sidebar-top d-flex align-items-center justify-content-between px-3">
                 <div class="d-flex align-items-center gap-2">
-                    <div class="brand-icon">LOGO</div>
+                    <img src="assets/img/logo.png" alt="logo" class="brand-logo" onerror="this.style.display='none'">
                     <div class="brand-text">Hệ thống quản lý</div>
                 </div>
                 <button id="btnCollapseSmall" class="btn btn-sm btn-light d-md-none"><i class="bi bi-list"></i></button>
             </div>
 
-            <nav class="sidebar-nav" id="sidebarNav">
+            <nav class="sidebar-nav" id="sidebarNav" aria-label="Main navigation">
                 <ul class="menu-root list-unstyled mb-0">
                     <li class="menu-item">
                         <a href="#" class="nav-link" data-title="Bàn làm việc">
@@ -47,8 +45,8 @@
                         <a href="#" class="nav-link" data-title="Người dùng">
                             <i class="bi bi-people"></i><span class="label">Người dùng</span>
                         </a>
-                        <ul class="menu-children list-unstyled">
-                            <li><a href="#" class="nav-link child" data-title="Danh sách người dùng"><i
+                        <ul class="menu-children list-unstyled" aria-hidden="true">
+                            <li><a href="#" class="nav-link child" data-title="Danh sách"><i
                                         class="bi bi-list"></i><span class="label">Danh sách</span></a></li>
                             <li><a href="#" class="nav-link child" data-title="Phân quyền"><i
                                         class="bi bi-shield-lock"></i><span class="label">Phân quyền</span></a></li>
@@ -59,7 +57,7 @@
                         <a href="#" class="nav-link" data-title="Cài đặt">
                             <i class="bi bi-gear"></i><span class="label">Cài đặt</span>
                         </a>
-                        <ul class="menu-children list-unstyled">
+                        <ul class="menu-children list-unstyled" aria-hidden="true">
                             <li><a href="#" class="nav-link child" data-title="Hệ thống"><i class="bi bi-hdd"></i><span
                                         class="label">Hệ thống</span></a></li>
                             <li><a href="#" class="nav-link child" data-title="Giao diện"><i
@@ -67,7 +65,7 @@
                         </ul>
                     </li>
 
-                    <!-- filler items to test scroll -->
+                    <!-- filler items -->
                     <li class="menu-item"><a href="#" class="nav-link" data-title="Mục 1"><i
                                 class="bi bi-folder"></i><span class="label">Mục 1</span></a></li>
                     <li class="menu-item"><a href="#" class="nav-link" data-title="Mục 2"><i
@@ -81,7 +79,7 @@
                 </ul>
             </nav>
 
-            <div class="sidebar-footer px-2 py-2 text-center">
+            <div class="sidebar-footer px-2 py-2">
                 <button id="btnToggleCollapse" class="btn btn-sm btn-light" title="Thu gọn/ Mở rộng"><i
                         class="bi bi-chevron-left"></i></button>
             </div>
@@ -89,6 +87,7 @@
 
         <!-- MAIN -->
         <div class="main d-flex flex-column">
+
             <!-- TOPBAR -->
             <header class="topbar d-flex align-items-center justify-content-between px-3">
                 <div class="d-flex align-items-center gap-3">
@@ -124,8 +123,19 @@
                         </div>
                     </div>
 
-                    <!-- filler to enable scroll -->
-                    <div style="height:900px"></div>
+                    <!-- demo content -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>Ví dụ nội dung</h5>
+                                    <p>Nội dung mẫu dài để kiểm tra cuộn (nếu cần) — bạn sẽ thay bằng datagrid của mình.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </main>
 
@@ -138,7 +148,6 @@
 
     <!-- libs -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- app script -->
