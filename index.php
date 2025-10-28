@@ -1,156 +1,78 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Admin Template — Demo</title>
-
-    <!-- Roboto Condensed -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap"
-        rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống quản lý</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="assets/css/styles.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="admin-app">
-
-        <!-- SIDEBAR -->
-        <aside id="sidebar" class="sidebar" role="navigation" aria-label="Sidebar">
-            <div class="sidebar-top d-flex align-items-center justify-content-between px-3">
-                <div class="d-flex align-items-center gap-2">
-                    <img src="assets/img/logo.png" alt="logo" class="brand-logo" onerror="this.style.display='none'">
-                    <div class="brand-text">Hệ thống quản lý</div>
-                </div>
-                <button id="btnCollapseSmall" class="btn btn-sm btn-light d-md-none"><i class="bi bi-list"></i></button>
+    <div class="layout-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/img/logo.png" alt="logo" class="logo">
+                <span class="title">Hệ thống quản lý</span>
             </div>
-
-            <nav class="sidebar-nav" id="sidebarNav" aria-label="Main navigation">
-                <ul class="menu-root list-unstyled mb-0">
-                    <li class="menu-item">
-                        <a href="#" class="nav-link" data-title="Bàn làm việc">
-                            <i class="bi bi-speedometer2"></i><span class="label">Bàn làm việc</span>
-                        </a>
-                    </li>
-
-                    <li class="menu-item has-children">
-                        <a href="#" class="nav-link" data-title="Người dùng">
-                            <i class="bi bi-people"></i><span class="label">Người dùng</span>
-                        </a>
-                        <ul class="menu-children list-unstyled" aria-hidden="true">
-                            <li><a href="#" class="nav-link child" data-title="Danh sách"><i
-                                        class="bi bi-list"></i><span class="label">Danh sách</span></a></li>
-                            <li><a href="#" class="nav-link child" data-title="Phân quyền"><i
-                                        class="bi bi-shield-lock"></i><span class="label">Phân quyền</span></a></li>
-                        </ul>
-                    </li>
-
-                    <li class="menu-item has-children">
-                        <a href="#" class="nav-link" data-title="Cài đặt">
-                            <i class="bi bi-gear"></i><span class="label">Cài đặt</span>
-                        </a>
-                        <ul class="menu-children list-unstyled" aria-hidden="true">
-                            <li><a href="#" class="nav-link child" data-title="Hệ thống"><i class="bi bi-hdd"></i><span
-                                        class="label">Hệ thống</span></a></li>
-                            <li><a href="#" class="nav-link child" data-title="Giao diện"><i
-                                        class="bi bi-palette"></i><span class="label">Giao diện</span></a></li>
-                        </ul>
-                    </li>
-
-                    <!-- filler items -->
-                    <li class="menu-item"><a href="#" class="nav-link" data-title="Mục 1"><i
-                                class="bi bi-folder"></i><span class="label">Mục 1</span></a></li>
-                    <li class="menu-item"><a href="#" class="nav-link" data-title="Mục 2"><i
-                                class="bi bi-folder"></i><span class="label">Mục 2</span></a></li>
-                    <li class="menu-item"><a href="#" class="nav-link" data-title="Mục 3"><i
-                                class="bi bi-folder"></i><span class="label">Mục 3</span></a></li>
-                    <li class="menu-item"><a href="#" class="nav-link" data-title="Mục 4"><i
-                                class="bi bi-folder"></i><span class="label">Mục 4</span></a></li>
-                    <li class="menu-item"><a href="#" class="nav-link" data-title="Mục 5"><i
-                                class="bi bi-folder"></i><span class="label">Mục 5</span></a></li>
-                </ul>
-            </nav>
-
-            <div class="sidebar-footer px-2 py-2">
-                <button id="btnToggleCollapse" class="btn btn-sm btn-light" title="Thu gọn/ Mở rộng"><i
-                        class="bi bi-chevron-left"></i></button>
+            <ul class="menu">
+                <li><a href="#"><i class="fa-solid fa-house"></i><span>Bàn làm việc</span></a></li>
+                <li class="has-submenu">
+                    <a href="#"><i class="fa-solid fa-users"></i><span>Người dùng</span></a>
+                    <ul class="submenu">
+                        <li><a href="#">Danh sách</a></li>
+                        <li><a href="#">Phân quyền</a></li>
+                    </ul>
+                </li>
+                <li class="has-submenu">
+                    <a href="#"><i class="fa-solid fa-gear"></i><span>Cài đặt</span></a>
+                    <ul class="submenu">
+                        <li><a href="#">Cấu hình</a></li>
+                        <li><a href="#">Sao lưu</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <button id="toggleSidebar" class="btn-toggle"><i class="fa-solid fa-chevron-left"></i></button>
             </div>
         </aside>
 
-        <!-- MAIN -->
-        <div class="main d-flex flex-column">
-
-            <!-- TOPBAR -->
-            <header class="topbar d-flex align-items-center justify-content-between px-3">
-                <div class="d-flex align-items-center gap-3">
-                    <button id="btnMobileToggle" class="btn btn-light btn-sm d-md-none"><i
-                            class="bi bi-list"></i></button>
-                    <h5 class="mb-0 topbar-title">Bảng điều khiển</h5>
+        <!-- Main area -->
+        <div class="main-area">
+            <header class="main-header">
+                <div class="header-left">
+                    <button id="mobileToggle" class="btn-mobile d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h6 class="mb-0 text-white">Bảng điều khiển</h6>
                 </div>
-
-                <div class="d-flex align-items-center gap-2">
-                    <button id="btnTheme" class="btn btn-outline-light btn-sm" title="Toggle dark mode"><i
-                            class="bi bi-moon-stars"></i></button>
-                    <div class="dropdown">
-                        <a class="d-flex align-items-center text-decoration-none" href="#" data-bs-toggle="dropdown">
-                            <img src="https://i.pravatar.cc/36" class="rounded-circle me-2" alt="avatar">
-                            <div class="d-none d-md-block text-white small">user</div>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Tài khoản</a></li>
-                            <li><a class="dropdown-item" href="#" id="btnLogout">Đăng xuất</a></li>
-                        </ul>
-                    </div>
+                <div class="header-right">
+                    <button id="darkModeBtn" class="btn btn-sm btn-outline-light"><i class="fa fa-moon"></i></button>
+                    <img src="https://i.pravatar.cc/40" class="user-avatar ms-2" alt="user">
                 </div>
             </header>
 
-            <!-- CONTENT -->
-            <main id="mainContent" class="main-content p-3">
-                <div class="container-fluid">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h3>Bảng điều khiển</h3>
-                            <p>Đây là khu vực nội dung chính. Khi bạn thêm module (Datagrid, Form...), chúng sẽ hiển thị
-                                tại đây.</p>
-                        </div>
+            <main class="main-content">
+                <div class="container-fluid py-3">
+                    <div class="card p-3 mb-3">
+                        <h5>Bảng điều khiển</h5>
+                        <p>Đây là khu vực hiển thị dữ liệu chính.</p>
                     </div>
-
-                    <!-- demo content -->
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5>Ví dụ nội dung</h5>
-                                    <p>Nội dung mẫu dài để kiểm tra cuộn (nếu cần) — bạn sẽ thay bằng datagrid của mình.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card p-3">
+                        <h5>Ví dụ nội dung</h5>
+                        <p>Phần này để test cuộn và dark mode...</p>
                     </div>
-
                 </div>
             </main>
 
-            <!-- FOOTER -->
-            <footer class="footer d-flex align-items-center justify-content-center">
-                <small class="text-white">© 2025 — Hệ thống quản lý nội bộ</small>
+            <footer class="main-footer text-center">
+                © 2025 – Hệ thống quản lý nội bộ
             </footer>
         </div>
     </div>
 
-    <!-- libs -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- app script -->
     <script src="assets/js/app.js"></script>
 </body>
 

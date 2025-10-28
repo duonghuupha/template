@@ -1,30 +1,21 @@
-/* Variables */
 :root {
-    --primary: #17a2a3;
-    /* header/footer accent */
-    --sidebar-bg: #e0e0e0;
-    /* sidebar light gray */
-    --sidebar-text: #0f1a1a;
-    --topbar-bg: var(--primary);
-    --footer-bg: #128380;
-    --bg: #f6f8f9;
-    --text: #21303a;
-
-    --sidebar-w: 250px;
+    --primary-color: #00897b;
+    --sidebar-bg: #efefef;
+    --sidebar-text: #333;
+    --header-h: 56px;
+    --sidebar-w: 240px;
     --sidebar-collapsed-w: 80px;
-    --header-h: 60px;
-    --footer-h: 48px;
+    --footer-h: 40px;
+    --page-bg: #f7f7f7;
+    --transition-speed: .22s;
 }
 
-/* Dark mode */
+/* dark vars (nếu dùng) */
 body.dark {
-    --primary: #6b5bff;
-    --sidebar-bg: #2c2c2c;
-    --sidebar-text: #e6eefc;
-    --topbar-bg: #101424;
-    --footer-bg: #0f1a2a;
-    --bg: #0a0f16;
-    --text: #d9e6ff;
+    --primary-color: #00695c;
+    --sidebar-bg: #222;
+    --sidebar-text: #e6e6e6;
+    --page-bg: #0b0f12;
 }
 
 /* Base */
@@ -38,274 +29,281 @@ html, body {
 
 body {
     margin: 0;
-    font-family: "Roboto Condensed", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    overflow-x: hidden;
-    /* prevent horizontal scroll */
-    min-width: 320px;
+    font-family: "Roboto Condensed", "Segoe UI", Arial, sans-serif;
+    background: var(--page-bg);
+    color: var(--sidebar-text);
+    overflow: hidden;
+    /* prevent horizontal page scroll */
 }
 
-/* Layout */
-.admin-app {
+/* layout wrapper */
+.layout-wrapper {
     display: flex;
     height: 100vh;
     width: 100%;
     min-width: 320px;
 }
 
-/* Sidebar */
+/* ---------- SIDEBAR ---------- */
 .sidebar {
     width: var(--sidebar-w);
+    min-width: var(--sidebar-collapsed-w);
     background: var(--sidebar-bg);
-    color: var(--sidebar-text);
     display: flex;
     flex-direction: column;
-    transition: width .22s ease, left .22s ease, background .22s ease;
-    flex-shrink: 0;
+    transition: width var(--transition-speed) ease, left var(--transition-speed) ease;
     border-right: 1px solid rgba(0, 0, 0, 0.06);
-    min-height: 100vh;
     position: relative;
+    /* for submenu absolute positioning */
     z-index: 1200;
     overflow: visible;
+    /* IMPORTANT: allow flyout visible outside */
 }
 
-/* Sidebar top (logo area) */
-.sidebar-top {
-    height: var(--header-h);
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
+/* Sidebar collapsed */
+.sidebar.collapsed {
+    width: var(--sidebar-collapsed-w);
 }
 
-.brand-logo {
-    width: 34px;
-    height: 34px;
-    object-fit: contain;
-    margin-right: 6px;
-}
-
-.brand-text {
-    font-weight: 700;
-    color: var(--sidebar-text);
-    font-size: 15px;
-}
-
-/* Nav area */
-.sidebar-nav {
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 10px 6px;
-    flex: 1;
-}
-
-/* scrollbar style */
-.sidebar-nav::-webkit-scrollbar {
-    width: 8px
-}
-
-.sidebar-nav::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.12);
-    border-radius: 6px
-}
-
-/* Menu */
-.menu-root {
-    list-style: none;
-    padding: 0;
-    margin: 0
-}
-
-.menu-root .menu-item {
-    position: relative
-}
-
-.menu-root .menu-item+.menu-item {
-    margin-top: 4px
-}
-
-.nav-link {
+/* sidebar header (logo area) - same height as top header */
+.sidebar-header {
+    background: var(--primary-color);
+    color: #fff;
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 10px 14px;
+    height: var(--header-h);
+    flex-shrink: 0;
+}
+
+.sidebar-header img.logo {
+    width: 34px;
+    height: 34px;
+    object-fit: cover;
+}
+
+.sidebar-header .title {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+/* hide title when collapsed */
+.sidebar.collapsed .sidebar-header .title {
+    display: none;
+}
+
+/* menu area */
+.menu {
+    list-style: none;
+    margin: 0;
+    padding: 8px 6px;
+    overflow-y: auto;
+    overflow-x: visible;
+    flex: 1;
+}
+
+.menu::-webkit-scrollbar {
+    width: 8px
+}
+
+.menu::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 6px
+}
+
+.menu li {
+    position: relative;
+}
+
+.menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
     color: var(--sidebar-text);
     text-decoration: none;
     border-radius: 8px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin: 4px 6px;
 }
 
-.nav-link .bi {
+.menu a .fa, .menu a .bi {
     width: 28px;
-    font-size: 1.15rem;
     text-align: center;
-    color: var(--sidebar-text)
+    font-size: 1.05rem;
 }
 
-.nav-link .label {
-    flex: 1;
-    font-weight: 500
+/* hide labels in collapsed state */
+.sidebar.collapsed .menu a .label {
+    display: none;
 }
 
-.nav-link:hover {
-    background: rgba(0, 0, 0, 0.04)
+/* hover */
+.menu a:hover {
+    background: rgba(0, 0, 0, 0.04);
 }
 
-/* Submenu (flyout) - CSS only */
-.menu-children {
-    display: block;
+/* ---------- SUBMENU (flyout) ---------- */
+/* Make submenu appear *outside* sidebar without expanding it or creating horizontal scrollbar */
+.menu .submenu {
     position: absolute;
-    left: calc(var(--sidebar-w));
     top: 0;
-    min-width: 220px;
+    left: calc(var(--sidebar-w) + 8px);
+    /* default when sidebar expanded */
+    min-width: 200px;
     background: var(--sidebar-bg);
-    color: var(--sidebar-text);
-    border-radius: 8px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-    padding: 6px 0;
-    z-index: 1600;
+    border-radius: 6px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    display: block;
     visibility: hidden;
     opacity: 0;
-    transform: translateX(-8px);
-    transition: all .12s ease;
+    transform: translateX(-6px);
+    transition: all .16s ease;
+    padding: 6px 0;
+    z-index: 1500;
 }
 
-.menu-children .nav-link {
-    padding: 8px 12px;
-    margin: 4px 6px;
-    color: var(--sidebar-text)
-}
-
-/* show flyout when parent hovered */
-.menu-item:hover>.menu-children {
+/* when the parent li is hovered show submenu */
+.menu li.has-submenu:hover>.submenu {
     visibility: visible;
     opacity: 1;
     transform: translateX(0);
 }
 
-/* adjust flyout when collapsed */
-.sidebar.collapsed .menu-children {
-    left: calc(var(--sidebar-collapsed-w));
+/* adjust left when collapsed */
+.sidebar.collapsed .menu .submenu {
+    left: calc(var(--sidebar-collapsed-w) + 8px);
 }
 
-/* Collapsed */
-.sidebar.collapsed {
-    width: var(--sidebar-collapsed-w);
+/* submenu item */
+.menu .submenu a {
+    display: block;
+    padding: 8px 12px;
+    color: var(--sidebar-text);
+    text-decoration: none;
 }
 
-.sidebar.collapsed .brand-text {
-    display: none;
+.menu .submenu a:hover {
+    background: rgba(0, 0, 0, 0.05);
 }
 
-.sidebar.collapsed .nav-link {
-    justify-content: center;
-    padding: 10px 6px;
+/* ensure submenu not clipped by parent overflow */
+.sidebar, .menu {
+    overflow: visible !important;
 }
 
-.sidebar.collapsed .label {
-    display: none;
-}
-
-/* Main area */
-.main {
+/* ---------- MAIN AREA ---------- */
+.main-area {
     flex: 1;
     display: flex;
     flex-direction: column;
     min-width: 0;
+    /* min-width:0 prevents flex overflow */
 }
 
-/* Topbar */
-.topbar {
+/* top header — same height as sidebar header */
+.main-header {
     height: var(--header-h);
-    background: var(--topbar-bg);
+    background: var(--primary-color);
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 16px;
-    position: sticky;
-    top: 0;
-    z-index: 1400;
+    padding: 0 14px;
+    flex-shrink: 0;
+    z-index: 1300;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
-/* main content (internal scroll only) */
+/* on small screens header fixed and content padding-top later applied by JS */
+.main-header .header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-mobile {
+    background: transparent;
+    border: 0;
+    color: #fff;
+    font-size: 20px;
+}
+
+/* content area with internal scroll */
 .main-content {
-    padding: 18px;
     height: calc(100vh - var(--header-h) - var(--footer-h));
     overflow: auto;
+    padding: 18px;
     -webkit-overflow-scrolling: touch;
 }
 
-/* Footer */
-.footer {
+/* footer */
+.main-footer {
     height: var(--footer-h);
-    background: var(--footer-bg);
+    background: var(--primary-color);
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: sticky;
-    bottom: 0;
-    z-index: 1300;
+    flex-shrink: 0;
 }
 
-/* Responsive: mobile overlay sidebar */
+/* ---------- COLLAPSED small UX ---------- */
+/* center icons when collapsed */
+.sidebar.collapsed .menu a {
+    justify-content: center;
+    padding: 10px 6px;
+}
+
+/* small flytip (for collapsed items without submenu) */
+.flytip {
+    position: fixed;
+    background: rgba(0, 0, 0, .85);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    z-index: 3000;
+    font-size: 13px;
+    pointer-events: none;
+}
+
+/* ---------- RESPONSIVE: mobile overlay ---------- */
 @media (max-width: 991px) {
     .sidebar {
         position: fixed;
-        left: -320px;
+        left: -300px;
         top: 0;
         bottom: 0;
         width: 260px;
-        z-index: 2000;
-        transition: left .22s ease;
+        transition: left var(--transition-speed);
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.18);
     }
 
-    .sidebar.show {
+    .sidebar.active {
         left: 0;
     }
 
-    .main {
-        margin-left: 0;
+    .layout-wrapper {
+        overflow: hidden;
     }
 
-    .topbar {
+    .main-header {
         position: fixed;
+        top: 0;
         left: 0;
         right: 0;
-        z-index: 1500;
     }
 
     .main-content {
-        padding-top: calc(var(--header-h) + 16px)
+        padding-top: calc(var(--header-h) + 14px);
     }
 
-    .footer {
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
+    /* ensure header doesn't cover content on mobile */
 }
 
-/* No horizontal scroll */
-html, body {
-    overflow-x: hidden;
-}
-
-/* small flytip */
-.flytip {
-    position: absolute;
-    background: rgba(0, 0, 0, 0.82);
-    color: #fff;
-    padding: 6px 10px;
-    border-radius: 4px;
-    z-index: 2000;
-    font-size: 13px;
+/* small visual tweaks */
+.card {
+    border-radius: 8px;
 }
