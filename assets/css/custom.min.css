@@ -1,0 +1,63 @@
+/* Giữ nguyên layout tổng thể của Ace Admin */
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    /* tránh scroll ngoài */
+}
+
+/* Navbar fixed của Ace thường cao 45px */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 45px;
+    z-index: 1000;
+}
+
+/* Container chính trừ phần navbar */
+.main-container {
+    position: fixed;
+    top: calc(1 * var(--navbar-height, 64px));
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Sidebar giữ nguyên style gốc */
+.sidebar {
+    position: relative;
+    height: 100%;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+/* Phần nội dung chính chiếm toàn bộ phần còn lại */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Page-content cuộn bên trong */
+.page-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    background-color: #f8f9fa;
+}
+
+/* Footer luôn nằm ở đáy phần nội dung */
+.footer {
+    flex: 0 0 45px;
+    height: 45px;
+    line-height: 45px;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    text-align: center;
+    z-index: 900;
+}
